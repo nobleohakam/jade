@@ -1,0 +1,24 @@
+html{
+    background-color:  #80FFB3;
+
+}
+
+h1 {
+    color: #2B80FF;
+    text-align: center;
+}
+
+p {
+    color: #8F57FF;
+    text-align: center;
+    padding: 15px;
+    margin: 10px;
+}
+
+table,th,tr,td {
+    color: #3C57FF;
+    text-align: center;
+    padding: 15px;
+    margin: 10px;
+    border: 1px solid #2B80FF;
+}

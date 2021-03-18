@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="jade.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"></script>
+<title>Jade Delight</title>
+</head>
+
+<body>
+<script language="javascript">
+//this function create menu item objects
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+//this is an array of menu items with their price
+menuItems = new Array(
+	new MenuItem("Chicken Chop Suey", 4.5),
+	new MenuItem("Sweet and Sour Pork", 6.25),
+	new MenuItem("Shrimp Lo Mein", 5.25),
+	new MenuItem("Moo Shi Chicken", 6.5),
+	new MenuItem("Fried Rice", 2.35)
+);
+
+
+
+//selects an item from a certain range
+function makeSelect(name, minRange, maxRange)
+{
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=minRange; j<=maxRange; j++)
+	   t += "<option>" + j + "</option>";
+	t+= "</select>";
+	return t;
+}
+</script>
+
+<h1>Jade Delight</h1>
+
+
+
+
+<form name="MyForm" method="post">
+
+<p>First Name: <input type="text"  name='fname'/></p>
+<p>Last Name*:  <input type="text"  name='lname' required/></p>
+
+<div id="gone" visibility: hidden>
+<p>Street: <input type="text"  name='street'/></p>
+<p>City: <input type="text"  name='city' /></p>
+</div>
+
+<p>Phone*: <input type="text"  name='phone' required /></p>
+<p>
+	<input type="radio"  name="p_or_d" value = "pickup" checked="checked" onchange="visible(document.getElementsByTagName('p_or_d').value)"/>Pickup
+	<input type="radio"  name='p_or_d' value = 'delivery' onchange="visible(document.getElementsByTagName('p_or_d').value)"/>Delivery
+</p>
+<table border="0" cellpadding="3">
+  <tr>
+    <th>Select Item</th>
+    <th>Item Name</th>
+    <th>Cost Each</th>
+    <th>Total Cost</th>
+  </tr>
+<script language="javascript">
+
+  var s = "";
+  for (i=0; i< menuItems.length; i++)
+  {
+	  s += "<tr><td>";
+	  s += makeSelect("quan" + i, 0, 10);
+	  s += "</td><td>" + menuItems[i].name + "</td>";
+	  s += "<td> $ " + menuItems[i].cost.toFixed(2) + "</td>";
+	  s += "<td>$<input type='text' name='cost'/></td></tr>";
+  }
+  document.writeln(s);
+
+  //check for quantity
+
+  for (var n = 0; n < menuItems.length; n++){
+      document.getElementsByName("quan" + n)[0].onchange = FindCost;
+  }
+
+  for (var n = 0; n < menuItems.length; n++){
+      var t_sum = 0;
+      t_sum += document.getElementsByName("cost")[n].value;
+      totalCost(t_sum);
+  }
+
+  function FindCost(i){
+      var obj = i.target;
+      var index = obj.name.slice(-1);
+      var quant = obj.value;
+      var sum = quant * menuItems[index].cost;
+      sum = sum.toFixed(2);
+      document.getElementsByName("cost")[index].value = sum;
+
+  }
+
+  function totalCost(sum){
+    var total = 0, tax, fin_total, TAX_PERCENT = 0.0625;
+    total = sum;
+    tax = (total * TAX_PERCENT);
+    fin_total = total + tax;
+    document.getElementById("subtotal").value = parseFloat((Math.round(100 * total))/100).toFixed(2);
+    document.getElementById("tax").value = parseFloat((Math.round(100 * tax))/100).toFixed(2);
+    document.getElementById("total").value = parseFloat((Math.round(100 * fin_total))/100).toFixed(2);
+
+
+}
+
+
+</script>
+</table>
+<p>Subtotal:
+   $ <input type="text"  name='subtotal' id="subtotal" />
+</p>
+<p>Mass tax 6.25%:
+  $ <input type="text"  name='tax' id="tax" />
+</p>
+<p>Total: $ <input type="text"  name='total' id="total" />
+</p>
+<input type = "button" value = "Submit Order" onclick="validateForm()" />
+</form>
+
+<script language="javascript">
+
+
+    function visible(value){
+    if (value == 'delivery'){
+        document.getElementById("gone").style.visibility = visible;
+    }
+}
+</script>
+
+<script language="javascript">
+function Sum (){
+
+}
+
+
+function validateForm(){
+    var x = document.forms[0]["lname"].value;
+    var y = document.forms[0]["phone"].value;
+    if (x == "") {
+    alert("Last name must be filled out");
+    }
+    else if (y.length < 10 || isNaN(y)) {
+    alert("Phone number must be filled out");
+    }
+    //send thank you when the order is valid
+
+}
+</script>
+
+</body>
+</html>
